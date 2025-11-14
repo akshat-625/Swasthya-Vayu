@@ -1,0 +1,7 @@
+project_id = "wdcklsxgiktnidhjcuvd"
+
+[functions.fetch-aqi]
+verify_jwt = false
+
+[functions.chat-aqi]
+verify_jwt = false

@@ -1,73 +1,146 @@
-# Welcome to your Lovable project
+# Swasthya Vayu - Air Quality Intelligence Platform
 
-## Project info
+A comprehensive air quality monitoring and health advisory platform with real-time AQI tracking, personalized health recommendations, and AI-powered chatbot assistance.
 
-**URL**: https://lovable.dev/projects/4c469b3d-9948-4e37-8426-c2e66f14bb55
+## 🌟 Features
 
-## How can I edit this code?
+- **Real-time AQI Monitoring** - Track air quality across Indian cities
+- **VayuBot AI Assistant** - Chat with AI for AQI queries and health advice
+- **Station-wise AQI Data** - View multiple monitoring stations in any city
+- **Health Profiles** - Personalized recommendations based on health conditions
+- **Climate Action Initiatives** - UN SDG aligned environmental goals
+- **Join the Movement** - Community engagement for cleaner air
 
-There are several ways of editing your application.
+## 🚀 Live Demo
 
-**Use Lovable**
+- **Frontend:** [https://swasthya-vayu-ipmvuhl21-akshat-jhanwars-projects.vercel.app](https://swasthya-vayu-ipmvuhl21-akshat-jhanwars-projects.vercel.app)
+- **Backend API:** [https://swasthya-vayu-backend.onrender.com](https://swasthya-vayu-backend.onrender.com)
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/4c469b3d-9948-4e37-8426-c2e66f14bb55) and start prompting.
+## 🛠️ Tech Stack
 
-Changes made via Lovable will be committed automatically to this repo.
+**Frontend:**
+- React 18.3.1 + TypeScript
+- Vite 5.4.19
+- Tailwind CSS + Shadcn UI
+- React Router DOM
+- Axios
 
-**Use your preferred IDE**
+**Backend:**
+- Flask 3.1.2 (Python)
+- Gunicorn
+- Scikit-learn (ML models)
+- WAQI API integration
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+**Database:**
+- Supabase (PostgreSQL)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+**Deployment:**
+- Vercel (Frontend)
+- Render (Backend)
 
-Follow these steps:
+## 📦 Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+### Prerequisites
+- Node.js 18+
+- Python 3.11+
+- Git
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+### Frontend Setup
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+# Clone the repository
+git clone https://github.com/akshat-625/Swasthya-Vayu.git
+cd Swasthya-Vayu
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+# Install dependencies
+npm install
+
+# Create .env file
+cp .env.example .env
+# Add your Supabase credentials
+
+# Start development server
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+### Backend Setup
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+# Navigate to backend directory
+cd backend
 
-**Use GitHub Codespaces**
+# Create virtual environment
+python -m venv venv
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+# Activate virtual environment (Windows)
+.\venv\Scripts\Activate.ps1
 
-## What technologies are used for this project?
+# Activate virtual environment (Mac/Linux)
+source venv/bin/activate
 
-This project is built with:
+# Install dependencies
+pip install -r requirements.txt
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+# Train ML model
+python train_model.py
 
-## How can I deploy this project?
+# Start Flask server
+python app.py
+```
 
-Simply open [Lovable](https://lovable.dev/projects/4c469b3d-9948-4e37-8426-c2e66f14bb55) and click on Share -> Publish.
+## 🔑 Environment Variables
 
-## Can I connect a custom domain to my Lovable project?
+### Frontend (.env)
+```env
+VITE_SUPABASE_URL=your_supabase_url
+VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
-Yes, you can!
+### Backend (backend/.env)
+```env
+WAQI_TOKEN=your_waqi_api_token
+```
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🌐 API Endpoints
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+- `GET /aqi?city=CityName` - Get AQI data for a city
+- `POST /predict` - ML-based health advisory
+- `POST /chat` - VayuBot chatbot
+- `GET /search-city?query=city` - Search for cities
+
+## 📱 Pages
+
+- `/` - Home with hero section
+- `/aqi` - Live AQI tracking
+- `/station-aqi` - Station-wise data
+- `/vayubot` - AI chatbot
+- `/how-it-works` - Platform explanation
+- `/join-movement` - Community signup
+- `/climate-action` - Environmental initiatives
+- `/about` - About the project
+- `/contact` - Contact form
+- `/settings` - User profile & preferences
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 👨‍💻 Author
+
+**Akshat Jhanwar**
+- GitHub: [@akshat-625](https://github.com/akshat-625)
+
+## 🙏 Acknowledgments
+
+- World Air Quality Index (WAQI) for AQI data
+- Supabase for database hosting
+- Shadcn UI for beautiful components
+- Vercel & Render for hosting
+
+---
+
+**Built with ❤️ for cleaner air and healthier communities**

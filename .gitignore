@@ -24,3 +24,33 @@ dist-ssr
 *.sw?
 
 .vercel
+
+# Environment variables (PRIVATE)
+.env
+.env.local
+.env.production
+.env.development
+backend/.env
+backend/.env.local
+
+# Python
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/.Python
+backend/venv/
+backend/.venv/
+backend/env/
+backend/.env/
+backend/model.joblib
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# API Keys and Secrets
+**/secrets.json
+**/config/secrets.*
+.secrets

@@ -14,11 +14,14 @@ interface UserProfile {
   name: string;
   age: string;
   city: string;
+  activityLevel?: string;
   healthConditions: {
     asthma: boolean;
     heartDisease: boolean;
     diabetes: boolean;
     lungDisease: boolean;
+    smoker: boolean;
+    allergies: boolean;
     other: boolean;
   };
 }
@@ -31,11 +34,14 @@ const SettingsPage = () => {
     name: "",
     age: "",
     city: "",
+    activityLevel: "moderate",
     healthConditions: {
       asthma: false,
       heartDisease: false,
       diabetes: false,
       lungDisease: false,
+      smoker: false,
+      allergies: false,
       other: false,
     },
   });
@@ -213,6 +219,20 @@ const SettingsPage = () => {
                   />
                 </div>
 
+                <div className="space-y-2">
+                  <Label htmlFor="activityLevel">Outdoor Activity Level</Label>
+                  <select
+                    id="activityLevel"
+                    value={profile.activityLevel || "moderate"}
+                    onChange={(e) => handleProfileChange("activityLevel" as any, e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md bg-background"
+                  >
+                    <option value="low">Low (Mostly indoors)</option>
+                    <option value="moderate">Moderate (Occasional outdoor activity)</option>
+                    <option value="high">High (Regular outdoor exercise/sports)</option>
+                  </select>
+                </div>
+
                 <div className="space-y-3">
                   <Label>Health Conditions</Label>
                   <div className="space-y-3">
@@ -226,6 +246,30 @@ const SettingsPage = () => {
                       />
                       <label htmlFor="asthma" className="text-sm cursor-pointer">
                         Asthma
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="allergies"
+                        checked={profile.healthConditions.allergies}
+                        onCheckedChange={(checked) => 
+                          handleHealthConditionChange("allergies", checked as boolean)
+                        }
+                      />
+                      <label htmlFor="allergies" className="text-sm cursor-pointer">
+                        Allergies (Respiratory)
+                      </label>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="smoker"
+                        checked={profile.healthConditions.smoker}
+                        onCheckedChange={(checked) => 
+                          handleHealthConditionChange("smoker", checked as boolean)
+                        }
+                      />
+                      <label htmlFor="smoker" className="text-sm cursor-pointer">
+                        Smoker
                       </label>
                     </div>
                     <div className="flex items-center space-x-2">

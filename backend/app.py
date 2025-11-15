@@ -84,43 +84,97 @@ def aqi():
         
         category, category_color = get_aqi_category(aqi_value)
         
-        # Generate health advice based on AQI
+        # Generate comprehensive health advice based on AQI
         def get_health_advice(aqi):
             if aqi <= 50:
                 return {
+                    "general": "Air quality is excellent. Safe for all outdoor activities.",
+                    "precautions": [
+                        "✅ Perfect day for outdoor exercise and activities",
+                        "✅ Safe for children to play outside",
+                        "✅ No restrictions for sensitive groups"
+                    ],
                     "children": "Air quality is great! Perfect for outdoor activities and play.",
                     "adults": "Excellent day for outdoor exercise and activities.",
-                    "elderly": "Safe for all outdoor activities. Enjoy the fresh air!"
+                    "elderly": "Safe for all outdoor activities. Enjoy the fresh air!",
+                    "emoji": "🟢"
                 }
             elif aqi <= 100:
                 return {
+                    "general": "Acceptable air quality. Sensitive individuals should limit long outdoor exposure.",
+                    "precautions": [
+                        "⚠️ Unusually sensitive people should limit prolonged exertion",
+                        "✅ Generally safe for most people",
+                        "👁️ Monitor air quality if you have respiratory conditions"
+                    ],
                     "children": "Generally safe, but unusually sensitive children should limit prolonged outdoor exertion.",
                     "adults": "Air quality is acceptable for most people.",
-                    "elderly": "Consider reducing prolonged outdoor exertion if experiencing symptoms."
+                    "elderly": "Consider reducing prolonged outdoor exertion if experiencing symptoms.",
+                    "emoji": "🟡"
                 }
             elif aqi <= 150:
                 return {
+                    "general": "May affect people with asthma or allergies. Carry inhalers and avoid heavy outdoor exercise.",
+                    "precautions": [
+                        "🫁 People with asthma should carry inhalers",
+                        "⚠️ Avoid heavy outdoor exercise",
+                        "😷 Consider wearing mask for prolonged outdoor exposure",
+                        "👶 Limit outdoor time for children and elderly"
+                    ],
                     "children": "Reduce prolonged outdoor activities. Watch for symptoms like coughing.",
                     "adults": "Sensitive individuals should limit outdoor exertion.",
-                    "elderly": "Reduce outdoor activities. Stay indoors if you have heart or lung conditions."
+                    "elderly": "Reduce outdoor activities. Stay indoors if you have heart or lung conditions.",
+                    "emoji": "🟠"
                 }
             elif aqi <= 200:
                 return {
+                    "general": "Unhealthy for everyone. Limit outdoor time, wear N95 if needed. Children and elderly should stay indoors.",
+                    "precautions": [
+                        "🚫 Limit outdoor activities for everyone",
+                        "😷 Wear N95 mask if going outside",
+                        "🏠 Children and elderly should stay indoors",
+                        "🪟 Keep windows closed",
+                        "💨 Use air purifiers if available"
+                    ],
                     "children": "Avoid prolonged outdoor activities. Stay indoors when possible.",
                     "adults": "Everyone should reduce prolonged outdoor exertion.",
-                    "elderly": "Avoid outdoor activities. Keep windows closed and use air purifiers."
+                    "elderly": "Avoid outdoor activities. Keep windows closed and use air purifiers.",
+                    "emoji": "🔴"
                 }
             elif aqi <= 300:
                 return {
+                    "general": "Very unhealthy. Avoid outdoor activity completely. Keep windows closed and stay hydrated.",
+                    "precautions": [
+                        "🚨 Avoid outdoor activity completely",
+                        "😷 Wear N95/N99 mask if you must go out",
+                        "🏠 Stay indoors - health alert for everyone",
+                        "🪟 Keep all windows and doors closed",
+                        "💨 Use air purifiers mandatory",
+                        "💧 Stay well hydrated",
+                        "🏥 Monitor health symptoms closely"
+                    ],
                     "children": "Avoid all outdoor activities. Keep children indoors.",
                     "adults": "Avoid all outdoor activities. Wear N95 masks if going outside.",
-                    "elderly": "Stay indoors. Use air purifiers. Seek medical attention if experiencing symptoms."
+                    "elderly": "Stay indoors. Use air purifiers. Seek medical attention if experiencing symptoms.",
+                    "emoji": "🟣"
                 }
             else:
                 return {
+                    "general": "Hazardous air quality. Stay indoors strictly. Wear N95 if going out. Follow government advisories.",
+                    "precautions": [
+                        "🆘 HEALTH EMERGENCY - Stay indoors strictly",
+                        "😷 Wear N95/N99 mask mandatory for any outdoor exposure",
+                        "🏠 Do not go outside unless absolutely necessary",
+                        "🪟 Seal windows and doors",
+                        "💨 Use multiple air purifiers",
+                        "💧 Drink plenty of water",
+                        "🏥 Seek immediate medical help if experiencing symptoms",
+                        "📢 Follow government health advisories"
+                    ],
                     "children": "Emergency conditions! Keep children indoors at all times.",
                     "adults": "Health alert! Everyone should avoid all outdoor activities.",
-                    "elderly": "Stay indoors. Use air purifiers. Consult doctor immediately if symptoms worsen."
+                    "elderly": "Stay indoors. Use air purifiers. Consult doctor immediately if symptoms worsen.",
+                    "emoji": "⚫"
                 }
         
         health_advice = get_health_advice(aqi_value)
@@ -144,13 +198,15 @@ def aqi():
             "category": category,
             "categoryColor": category_color,
             "pm25": pm25,
+            "pm10": pm10,
             "cigarettesPerDay": cigarettes_per_day,
+            "cigaretteEquivalent": cigarettes_per_day,
             "minutesLost": minutes_lost,
             "healthAdvice": health_advice,
+            "advice": health_advice.get("general", ""),
             "timestamp": d["time"]["s"],
             "hourlyForecast": hourly_forecast,
             "pm2_5": pm25,
-            "pm10": pm10,
             "main": "PM2.5" if pm25 > pm10 else "PM10",
             "coordinates": d["city"].get("geo", []),
             "source": "WAQI",
@@ -324,42 +380,75 @@ def chat():
                             pm10 = round(pm25 * 1.5, 1)
                         
                         city_name = aqi_data.get("city", {}).get("name", city)
+                        timestamp = aqi_data.get("time", {}).get("s", "N/A")
                     else:
                         # Fallback to random data if API fails
                         aqi_val = random.randint(50, 200)
                         pm25 = round(aqi_val * 0.5, 1)
                         pm10 = round(pm25 * 1.5, 1)
                         city_name = city.title()
+                        timestamp = "N/A"
                 except:
                     # Fallback for individual city errors
                     aqi_val = random.randint(50, 200)
                     pm25 = round(aqi_val * 0.5, 1)
                     pm10 = round(pm25 * 1.5, 1)
                     city_name = city.title()
+                    timestamp = "N/A"
                 
-                # Determine category
+                # Determine category with emoji
                 if aqi_val <= 50:
-                    category = "Good 🟢"
+                    category = "Good"
+                    emoji = "🟢"
                     advice = "Great day for outdoor activities!"
                 elif aqi_val <= 100:
-                    category = "Moderate 🟡"
+                    category = "Moderate"
+                    emoji = "🟡"
                     advice = "Acceptable for most people."
                 elif aqi_val <= 150:
-                    category = "Unhealthy for Sensitive Groups 🟠"
+                    category = "Unhealthy for Sensitive Groups"
+                    emoji = "🟠"
                     advice = "Sensitive individuals should limit prolonged outdoor activities."
                 elif aqi_val <= 200:
-                    category = "Unhealthy 🔴"
+                    category = "Unhealthy"
+                    emoji = "🔴"
                     advice = "Everyone should limit outdoor exertion."
                 elif aqi_val <= 300:
-                    category = "Very Unhealthy 🟣"
+                    category = "Very Unhealthy"
+                    emoji = "🟣"
                     advice = "Avoid outdoor activities!"
                 else:
-                    category = "Hazardous ⚫"
+                    category = "Hazardous"
+                    emoji = "⚫"
                     advice = "Stay indoors! Health emergency."
                 
                 cigarettes = round(pm25 / 22, 1)
                 
-                city_reply = f"**{city_name} Air Quality:**\n📊 **AQI:** {aqi_val} ({category})\n🔬 **PM2.5:** {pm25} μg/m³\n🔬 **PM10:** {pm10} μg/m³\n🚬 **Cigarette Equivalent:** {cigarettes} per day\n💡 **Advice:** {advice}"
+                # Add personalized advice based on user profile
+                personalized_advice = ""
+                if profile:
+                    age = profile.get("age", 30)
+                    asthma = profile.get("asthma", False)
+                    smoker = profile.get("smoker", False)
+                    allergies = profile.get("allergies", False)
+                    lung_disease = profile.get("lung_disease", False)
+                    outdoor_activity = profile.get("outdoor_activity", "moderate")
+                    
+                    if aqi_val > 100:
+                        personalized_advice = "\\n\\n**🩺 Personalized Advice:**"
+                        if asthma or lung_disease:
+                            personalized_advice += "\\n• 🫁 Keep your inhaler handy at all times"
+                            personalized_advice += "\\n• 🚫 Avoid outdoor activities completely"
+                        if smoker and aqi_val > 150:
+                            personalized_advice += "\\n• 🚬 URGENT: Your smoking + pollution is highly dangerous"
+                        if allergies and aqi_val > 100:
+                            personalized_advice += "\\n• 🤧 Take allergy medication preventively"
+                        if age < 12 or age > 60:
+                            personalized_advice += "\\n• 👨‍👩‍👧 Extra precautions needed for your age group"
+                        if outdoor_activity == "high" and aqi_val > 100:
+                            personalized_advice += "\\n• 🏃 Switch to indoor exercise today"
+                
+                city_reply = f"**{city_name} Air Quality:**\\n{emoji} **AQI:** {aqi_val} ({category})\\n🔬 **PM2.5:** {pm25} μg/m³\\n🔬 **PM10:** {pm10} μg/m³\\n🚬 **Cigarette Equivalent:** {cigarettes} per day\\n💡 **Advice:** {advice}\\n📅 **Last Updated:** {timestamp}\\n🌐 **Source:** WAQI (Real-time){personalized_advice}"
                 replies.append(city_reply)
             
             # Join multiple city responses

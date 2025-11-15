@@ -67,9 +67,18 @@ const ChatBot = () => {
 
       if (savedProfile) {
         const profile = JSON.parse(savedProfile);
-        profileData.location = profile.city || profileData.location;
-        profileData.age = parseInt(profile.age) || 30;
-        profileData.asthma = profile.healthConditions?.asthma || false;
+        profileData = {
+          location: profile.city || profileData.location,
+          aqi: aqiData?.aqi || profileData.aqi,
+          pm2_5: aqiData?.pm25 || profileData.pm2_5,
+          pm10: aqiData?.pm25 ? aqiData.pm25 * 1.5 : profileData.pm10,
+          age: parseInt(profile.age) || 30,
+          asthma: profile.healthConditions?.asthma || false,
+          smoker: profile.healthConditions?.smoker || false,
+          allergies: profile.healthConditions?.allergies || false,
+          lung_disease: profile.healthConditions?.lungDisease || false,
+          outdoor_activity: profile.activityLevel || "moderate"
+        };
       }
 
       const response = await axios.post("https://swasthya-vayu-backend.onrender.com/chat", {
@@ -82,7 +91,7 @@ const ChatBot = () => {
     } catch (error: any) {
       console.error("Chat error:", error);
       setMessages(prev => [...prev, {
-        text: "Cannot connect to server. Please make sure the Flask backend is running on port 5000.",
+        text: "Cannot connect to server. Please make sure the backend is running or try again later.",
         sender: "bot"
       }]);
     } finally {

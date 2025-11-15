@@ -58,7 +58,7 @@ const AQIPage = () => {
 
       setSearchingCities(true);
       try {
-        const response = await axios.get(`/api/search_cities?keyword=${encodeURIComponent(city)}`);
+        const response = await axios.get(`https://swasthya-vayu-backend.onrender.com/search_cities?keyword=${encodeURIComponent(city)}`);
         if (response.data.cities) {
           setCitySuggestions(response.data.cities.slice(0, 8)); // Show max 8 suggestions
           setShowSuggestions(true);
@@ -131,7 +131,7 @@ const AQIPage = () => {
     setData(null);
     setPrediction(null);
     try {
-      const res = await axios.get(`/api/aqi`, { params: { city: targetCity } });
+      const res = await axios.get(`https://swasthya-vayu-backend.onrender.com/aqi`, { params: { city: targetCity } });
       setData(res.data);
       // Auto-fetch health prediction when AQI data is loaded
       if (res.data) {
@@ -150,7 +150,7 @@ const AQIPage = () => {
 
     setPredicting(true);
     try {
-      const res = await axios.post(`/api/predict`, {
+      const res = await axios.post(`https://swasthya-vayu-backend.onrender.com/predict`, {
         aqi: targetData.aqi,
         pm2_5: targetData.pm2_5 || targetData.aqi * 0.5,
         temp: 25,

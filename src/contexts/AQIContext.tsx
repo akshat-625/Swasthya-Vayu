@@ -55,7 +55,7 @@ export const AQIProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
 
       // Call Flask backend with city name
-      const response = await fetch(`http://localhost:5000/aqi?city=${encodeURIComponent(cityName)}`);
+      const response = await fetch(`https://swasthya-vayu-backend.onrender.com/aqi?city=${encodeURIComponent(cityName)}`);
       
       if (!response.ok) {
         throw new Error(`Backend error: ${response.status}`);

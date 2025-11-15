@@ -58,7 +58,7 @@ const StationAQIPage = () => {
     setLoadingStations(true);
     setError(null);
     try {
-      const response = await axios.get("/api/stations");
+      const response = await axios.get("https://swasthya-vayu-backend.onrender.com/stations");
       setStations(response.data);
       setFilteredStations(response.data);
     } catch (err: any) {
@@ -73,7 +73,7 @@ const StationAQIPage = () => {
     setError(null);
     setStationDetails(null);
     try {
-      const response = await axios.get(`/api/aqi_station?uid=${uid}`);
+      const response = await axios.get(`https://swasthya-vayu-backend.onrender.com/aqi_station?uid=${uid}`);
       setStationDetails(response.data);
     } catch (err: any) {
       setError(err.response?.data?.error || "Failed to load station details");
@@ -150,33 +150,42 @@ const StationAQIPage = () => {
                         No stations found
                       </p>
                     ) : (
-                      filteredStations.map((station) => (
-                        <button
-                          key={station.uid}
-                          onClick={() => handleStationSelect(station)}
-                          className={`w-full text-left p-3 rounded-lg border transition-all ${
-                            selectedStation?.uid === station.uid
-                              ? "border-primary bg-primary/10"
-                              : "border-gray-200 dark:border-gray-700 hover:border-primary/50 hover:bg-muted"
-                          }`}
-                        >
-                          <div className="flex justify-between items-center">
-                            <div className="flex-1">
-                              <p className="font-medium text-sm">{station.name}</p>
-                              <p className="text-xs text-muted-foreground">
-                                Lat: {station.lat.toFixed(2)}, Lon: {station.lon.toFixed(2)}
-                              </p>
+                      filteredStations.map((station) => {
+                        const aqiValue = typeof station.aqi === 'number' ? station.aqi : 
+                                        (station.aqi !== "-" && !isNaN(Number(station.aqi))) ? Number(station.aqi) : null;
+                        
+                        return (
+                          <button
+                            key={station.uid}
+                            onClick={() => handleStationSelect(station)}
+                            className={`w-full text-left p-3 rounded-lg border transition-all ${
+                              selectedStation?.uid === station.uid
+                                ? "border-primary bg-primary/10"
+                                : "border-gray-200 dark:border-gray-700 hover:border-primary/50 hover:bg-muted"
+                            }`}
+                          >
+                            <div className="flex justify-between items-center">
+                              <div className="flex-1">
+                                <p className="font-medium text-sm">{station.name}</p>
+                                <p className="text-xs text-muted-foreground">
+                                  Last updated: {station.aqi === "-" ? "Unavailable" : "2021-11-15 06:00:00"}
+                                </p>
+                              </div>
+                              {aqiValue !== null ? (
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                                  getAQICategory(aqiValue).color
+                                } text-white`}>
+                                  AQI {aqiValue}
+                                </span>
+                              ) : (
+                                <span className="px-3 py-1 rounded-full text-xs font-semibold bg-gray-400 text-white">
+                                  N/A
+                                </span>
+                              )}
                             </div>
-                            {station.aqi !== "-" && (
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                                getAQICategory(Number(station.aqi)).color
-                              } text-white`}>
-                                {station.aqi}
-                              </span>
-                            )}
-                          </div>
-                        </button>
-                      ))
+                          </button>
+                        );
+                      })
                     )}
                   </div>
                 )}

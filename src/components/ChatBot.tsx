@@ -72,7 +72,7 @@ const ChatBot = () => {
         profileData.asthma = profile.healthConditions?.asthma || false;
       }
 
-      const response = await axios.post("http://localhost:5000/chat", {
+      const response = await axios.post("https://swasthya-vayu-backend.onrender.com/chat", {
         message: userMessage,
         userProfile: profileData
       });

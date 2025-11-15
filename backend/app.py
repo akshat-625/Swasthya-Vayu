@@ -65,14 +65,93 @@ def aqi():
         # Extract pollutant data
         pm25 = iaqi.get("pm25", {}).get("v", 0)
         pm10 = iaqi.get("pm10", {}).get("v", 0)
+        aqi_value = d["aqi"]
+        
+        # Determine AQI category
+        def get_aqi_category(aqi):
+            if aqi <= 50:
+                return "Good", "#22c55e"
+            elif aqi <= 100:
+                return "Moderate", "#eab308"
+            elif aqi <= 150:
+                return "Unhealthy for Sensitive Groups", "#f97316"
+            elif aqi <= 200:
+                return "Unhealthy", "#ef4444"
+            elif aqi <= 300:
+                return "Very Unhealthy", "#a855f7"
+            else:
+                return "Hazardous", "#7f1d1d"
+        
+        category, category_color = get_aqi_category(aqi_value)
+        
+        # Generate health advice based on AQI
+        def get_health_advice(aqi):
+            if aqi <= 50:
+                return {
+                    "children": "Air quality is great! Perfect for outdoor activities and play.",
+                    "adults": "Excellent day for outdoor exercise and activities.",
+                    "elderly": "Safe for all outdoor activities. Enjoy the fresh air!"
+                }
+            elif aqi <= 100:
+                return {
+                    "children": "Generally safe, but unusually sensitive children should limit prolonged outdoor exertion.",
+                    "adults": "Air quality is acceptable for most people.",
+                    "elderly": "Consider reducing prolonged outdoor exertion if experiencing symptoms."
+                }
+            elif aqi <= 150:
+                return {
+                    "children": "Reduce prolonged outdoor activities. Watch for symptoms like coughing.",
+                    "adults": "Sensitive individuals should limit outdoor exertion.",
+                    "elderly": "Reduce outdoor activities. Stay indoors if you have heart or lung conditions."
+                }
+            elif aqi <= 200:
+                return {
+                    "children": "Avoid prolonged outdoor activities. Stay indoors when possible.",
+                    "adults": "Everyone should reduce prolonged outdoor exertion.",
+                    "elderly": "Avoid outdoor activities. Keep windows closed and use air purifiers."
+                }
+            elif aqi <= 300:
+                return {
+                    "children": "Avoid all outdoor activities. Keep children indoors.",
+                    "adults": "Avoid all outdoor activities. Wear N95 masks if going outside.",
+                    "elderly": "Stay indoors. Use air purifiers. Seek medical attention if experiencing symptoms."
+                }
+            else:
+                return {
+                    "children": "Emergency conditions! Keep children indoors at all times.",
+                    "adults": "Health alert! Everyone should avoid all outdoor activities.",
+                    "elderly": "Stay indoors. Use air purifiers. Consult doctor immediately if symptoms worsen."
+                }
+        
+        health_advice = get_health_advice(aqi_value)
+        
+        # Generate hourly forecast (simplified - using slight variations)
+        hourly_forecast = []
+        for hour in range(24):
+            variation = random.randint(-10, 10)
+            forecast_aqi = max(0, aqi_value + variation)
+            hourly_forecast.append({"hour": hour, "aqi": forecast_aqi})
+        
+        # Calculate cigarettes equivalent (rough estimate: 1 cigarette ≈ AQI 22 for 24 hours)
+        cigarettes_per_day = round(pm25 / 22, 1)
+        
+        # Calculate minutes of life lost (rough estimate)
+        minutes_lost = round(aqi_value * 0.5)
         
         return jsonify({
             "city": d["city"]["name"],
-            "aqi": d["aqi"],
+            "aqi": aqi_value,
+            "category": category,
+            "categoryColor": category_color,
+            "pm25": pm25,
+            "cigarettesPerDay": cigarettes_per_day,
+            "minutesLost": minutes_lost,
+            "healthAdvice": health_advice,
+            "timestamp": d["time"]["s"],
+            "hourlyForecast": hourly_forecast,
             "pm2_5": pm25,
             "pm10": pm10,
             "main": "PM2.5" if pm25 > pm10 else "PM10",
-            "timestamp": d["time"]["s"],
             "coordinates": d["city"].get("geo", []),
             "source": "WAQI",
             "dominentpol": d.get("dominentpol", "pm25")

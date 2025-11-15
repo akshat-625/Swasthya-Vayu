@@ -69,19 +69,20 @@ const Contact = () => {
             <div className="bg-card rounded-xl p-6 shadow-[var(--shadow-soft)]">
               <Mail className="h-8 w-8 text-primary mb-3" />
               <h3 className="font-bold text-lg mb-2">Email Us</h3>
-              <p className="text-muted-foreground">support@swasthyavayu.in</p>
+              <p className="text-muted-foreground">contact.swasthyavayu@gmail.com</p>
             </div>
 
             <div className="bg-card rounded-xl p-6 shadow-[var(--shadow-soft)]">
               <Phone className="h-8 w-8 text-secondary mb-3" />
               <h3 className="font-bold text-lg mb-2">Call Us</h3>
-              <p className="text-muted-foreground">+91 1800-VAYU-HELP</p>
+              <p className="text-muted-foreground">+91-11-43102030</p>
+              <p className="text-xs text-muted-foreground mt-1">Central Pollution Control Board, India</p>
             </div>
 
             <div className="bg-card rounded-xl p-6 shadow-[var(--shadow-soft)]">
               <MapPin className="h-8 w-8 text-accent mb-3" />
               <h3 className="font-bold text-lg mb-2">Location</h3>
-              <p className="text-muted-foreground">New Delhi, India</p>
+              <p className="text-muted-foreground">Pune, India</p>
             </div>
           </div>
 

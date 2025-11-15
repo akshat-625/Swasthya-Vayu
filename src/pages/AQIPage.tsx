@@ -150,14 +150,66 @@ const AQIPage = () => {
 
     setPredicting(true);
     try {
-      const res = await axios.post(`https://swasthya-vayu-backend.onrender.com/predict`, {
-        aqi: targetData.aqi,
-        pm2_5: targetData.pm2_5 || targetData.aqi * 0.5,
-        temp: 25,
-        age: parseInt(age) || 30,
-        asthma: hasAsthma ? 1 : 0,
-      });
-      setPrediction(res.data);
+      // Get enhanced health advisory from the AQI data itself
+      if (targetData.healthAdvice && targetData.healthAdvice.general) {
+        // Use the enhanced advisory data from backend
+        const userAge = parseInt(age) || 30;
+        let personalizedAdvice = targetData.healthAdvice.general;
+        let precautions = targetData.healthAdvice.precautions || [];
+        
+        // Add personalized recommendations based on user profile
+        const savedProfile = localStorage.getItem("vayu_profile");
+        if (savedProfile) {
+          try {
+            const profile = JSON.parse(savedProfile);
+            const additionalAdvice = [];
+            
+            if (targetData.aqi > 100) {
+              if (hasAsthma || profile.healthConditions?.asthma || profile.healthConditions?.lungDisease) {
+                additionalAdvice.push("🫁 Keep your inhaler handy at all times");
+                additionalAdvice.push("🚫 Avoid all outdoor activities");
+              }
+              if (profile.healthConditions?.smoker && targetData.aqi > 150) {
+                additionalAdvice.push("🚬 URGENT: Your smoking + pollution is highly dangerous");
+              }
+              if (profile.healthConditions?.allergies && targetData.aqi > 100) {
+                additionalAdvice.push("🤧 Take allergy medication preventively");
+              }
+              if (userAge < 12 || userAge > 60) {
+                additionalAdvice.push("👨‍👩‍👧 Extra precautions needed for your age group");
+              }
+              if (profile.activityLevel === "high" && targetData.aqi > 100) {
+                additionalAdvice.push("🏃 Switch to indoor exercise today");
+              }
+            }
+            
+            if (additionalAdvice.length > 0) {
+              precautions = [...precautions, ...additionalAdvice];
+            }
+          } catch (e) {
+            console.error("Error parsing profile:", e);
+          }
+        }
+        
+        setPrediction({
+          advisory: {
+            code: targetData.aqi <= 100 ? 0 : targetData.aqi <= 150 ? 1 : 2,
+            text: personalizedAdvice,
+            precautions: precautions,
+            emoji: targetData.healthAdvice.emoji || ""
+          }
+        });
+      } else {
+        // Fallback to old predict endpoint if needed
+        const res = await axios.post(`https://swasthya-vayu-backend.onrender.com/predict`, {
+          aqi: targetData.aqi,
+          pm2_5: targetData.pm2_5 || targetData.aqi * 0.5,
+          temp: 25,
+          age: parseInt(age) || 30,
+          asthma: hasAsthma ? 1 : 0,
+        });
+        setPrediction(res.data);
+      }
     } catch (err: any) {
       console.error("Prediction error:", err);
     } finally {
@@ -453,8 +505,25 @@ const AQIPage = () => {
                   {prediction && (
                     <Alert className={`border-2 ${getAdvisoryColor(prediction.advisory.code)}`}>
                       <AlertCircle className="h-4 w-4" />
-                      <AlertDescription className="font-semibold">
-                        {prediction.advisory.text}
+                      <AlertDescription>
+                        <div className="space-y-3">
+                          <div className="flex items-center gap-2">
+                            {prediction.advisory.emoji && (
+                              <span className="text-2xl">{prediction.advisory.emoji}</span>
+                            )}
+                            <p className="font-semibold">{prediction.advisory.text}</p>
+                          </div>
+                          {prediction.advisory.precautions && prediction.advisory.precautions.length > 0 && (
+                            <ul className="space-y-2 mt-3">
+                              {prediction.advisory.precautions.map((precaution: string, index: number) => (
+                                <li key={index} className="text-sm flex items-start gap-2">
+                                  <span className="mt-0.5">•</span>
+                                  <span>{precaution}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          )}
+                        </div>
                       </AlertDescription>
                     </Alert>
                   )}

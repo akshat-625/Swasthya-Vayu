@@ -15,12 +15,18 @@ import JoinMovementPage from "./pages/JoinMovementPage";
 import HowItWorksPage from "./pages/HowItWorksPage";
 import SettingsPage from "./pages/SettingsPage";
 import NotFound from "./pages/NotFound";
+import { wakeBackend } from "./utils/wakeBackend";
 
 export default function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Wake up backend immediately
+    wakeBackend("https://swasthya-vayu-backend.onrender.com/health").catch(() => {
+      // Silent fail - don't block UI
+    });
+
     // Check if user is already logged in
     const authStatus = localStorage.getItem("vayu_authenticated");
     const userName = localStorage.getItem("vayu_user_name");

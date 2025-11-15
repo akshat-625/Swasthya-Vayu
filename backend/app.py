@@ -23,6 +23,14 @@ else:
 
 OPENWEATHER_API_KEY = os.getenv("OPENWEATHER_API_KEY")  # optional
 
+@app.route("/health")
+def health():
+    """
+    Health check endpoint - no auth required
+    Used to wake up the backend from sleep
+    """
+    return jsonify({"status": "ok"}), 200
+
 @app.route("/aqi")
 def aqi():
     """

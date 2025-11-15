@@ -55,7 +55,7 @@ const Navigation = () => {
                                 geoResponse.data.address.village || 
                                 "Mumbai";
             
-            const aqiResponse = await axios.get(`/api/aqi`, { params: { city: detectedCity } });
+            const aqiResponse = await axios.get(`https://swasthya-vayu-backend.onrender.com/aqi`, { params: { city: detectedCity } });
             setAqiData(aqiResponse.data);
           } catch (err: any) {
             setError(err?.response?.data?.error || "Failed to fetch AQI data");
@@ -66,7 +66,7 @@ const Navigation = () => {
         async (err) => {
           console.error("Geolocation error:", err);
           try {
-            const aqiResponse = await axios.get(`/api/aqi`, { params: { city: "Mumbai" } });
+            const aqiResponse = await axios.get(`https://swasthya-vayu-backend.onrender.com/aqi`, { params: { city: "Mumbai" } });
             setAqiData(aqiResponse.data);
           } catch (err: any) {
             setError("Failed to fetch AQI data");
@@ -77,7 +77,7 @@ const Navigation = () => {
       );
     } else {
       try {
-        const aqiResponse = await axios.get(`/api/aqi`, { params: { city: "Mumbai" } });
+        const aqiResponse = await axios.get(`https://swasthya-vayu-backend.onrender.com/aqi`, { params: { city: "Mumbai" } });
         setAqiData(aqiResponse.data);
       } catch (err: any) {
         setError("Failed to fetch AQI data");

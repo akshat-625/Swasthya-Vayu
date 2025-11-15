@@ -133,9 +133,21 @@ const AQIWidget = () => {
 
                   {/* Quick Alert */}
                   <div className={`p-4 rounded-lg border-2 ${getCategoryStyles(aqiData.category)}`}>
-                    <AlertCircle className="h-6 w-6 mb-2" />
-                    <p className="font-semibold mb-2">General Advice</p>
-                    <p className="text-sm">{aqiData.healthAdvice.adults}</p>
+                    <div className="flex items-center gap-2 mb-2">
+                      <AlertCircle className="h-6 w-6" />
+                      <p className="font-semibold text-lg">{aqiData.healthAdvice.emoji} Health Advisory</p>
+                    </div>
+                    <p className="text-sm font-semibold mb-3">{aqiData.healthAdvice.general}</p>
+                    {aqiData.healthAdvice.precautions && (
+                      <ul className="space-y-2">
+                        {aqiData.healthAdvice.precautions.map((precaution: string, index: number) => (
+                          <li key={index} className="text-sm flex items-start gap-2">
+                            <span className="mt-0.5">•</span>
+                            <span>{precaution}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
                   </div>
                 </div>
               </CardContent>

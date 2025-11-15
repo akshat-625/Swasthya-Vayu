@@ -10,10 +10,15 @@ export async function wakeBackend(url: string): Promise<void> {
 
   const attemptWake = async (): Promise<boolean> => {
     try {
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 5000);
+      
       const response = await fetch(url, {
         method: "GET",
-        signal: AbortSignal.timeout(5000),
+        signal: controller.signal,
       });
+      
+      clearTimeout(timeout);
       return response.ok;
     } catch (error) {
       return false;
